@@ -1,69 +1,894 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bürger-Echo Ingelheim</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide-react.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Politiker Super Trumpf</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', cursive, sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            background: radial-gradient(circle at center, #0f172a, #020617);
+        }
+
+        .comic-font {
+            font-family: 'Luckiest Guy', cursive, sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .comic-bg {
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(#dc2626 15%, transparent 16%),
+                radial-gradient(#2563eb 15%, transparent 16%);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
+        }
+
+        .comic-box-shadow {
+            box-shadow: 6px 6px 0px #000;
+        }
+
+        .stat-row {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .stat-row:hover:not(.disabled) {
+            transform: scale(1.02) translateX(4px);
+            background-color: #fef08a !important;
+            cursor: pointer;
+        }
+
+        .stat-row:active:not(.disabled) {
+            transform: scale(0.97);
+        }
+
+        @keyframes pulseWin {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(34, 197, 94, 0.8); }
+            50% { transform: scale(1.04); box-shadow: 0 0 35px rgba(34, 197, 94, 1); }
+        }
+
+        @keyframes pulseLose {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.8); }
+            50% { transform: scale(0.96); box-shadow: 0 0 35px rgba(239, 68, 68, 1); }
+        }
+
+        .card-win { animation: pulseWin 0.6s 2; border-color: #22c55e !important; }
+        .card-lose { animation: pulseLose 0.6s 2; border-color: #ef4444 !important; }
+
+        .joker-pulse {
+            animation: glow 1.2s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #eab308; }
+            to { box-shadow: 0 0 20px #eab308; }
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen">
-  <div id="root"></div>
+<body class="min-h-screen comic-bg flex items-center justify-center p-1 sm:p-4 text-slate-900">
 
-  <script type="text/babel">
-    const { useState } = React;
-    const { 
-      MapPin, Camera, AlertCircle, CheckCircle2, Clock, ThumbsUp, 
-      Filter, Send, Shield, ChevronRight, UserCheck, ArrowLeft 
-    } = lucide;
+    <!-- Mobile Smartphone Frame -->
+    <div class="w-full max-w-md bg-slate-900 rounded-[44px] p-2.5 sm:p-4 shadow-2xl border-4 border-black relative comic-box-shadow">
+        
+        <!-- Mobile Inner Screen -->
+        <div class="bg-slate-100 rounded-[34px] overflow-hidden border-3 border-black flex flex-col h-[93vh] max-h-[860px] relative">
+            
+            <!-- Android Top Bar -->
+            <div class="bg-gradient-to-r from-red-600 to-amber-600 border-b-3 border-black px-4 py-1 flex justify-between items-center text-xs font-bold text-white z-20">
+                <span id="android-time" class="comic-font">12:00</span>
+                <div class="flex items-center gap-2">
+                    <span class="bg-black text-yellow-400 text-[10px] px-2 py-0.5 rounded-full font-black border border-yellow-400">POLITIK TRUMPF</span>
+                    <i onclick="toggleAudio()" id="audio-icon" class="fa-solid fa-volume-high cursor-pointer hover:text-yellow-300"></i>
+                    <i class="fa-solid fa-battery-full"></i>
+                </div>
+            </div>
 
-    const initialReports = [
-      {
-        id: 1,
-        title: "Schlagloch Bahnhofstraße",
-        category: "Straßenschäden",
-        district: "Ober-Ingelheim",
-        address: "Bahnhofstraße 12, 55218 Ingelheim",
-        status: "in_bearbeitung",
-        date: "01.11.2026",
-        likes: 12,
-        userLiked: false,
-        desc: "Tiefe Vertiefung in der Fahrbahn nahe dem Fußgängerüberweg. Gefahrenstelle für Radfahrer.",
-        img: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=600",
-        officialNote: "Bauhof ist informiert. Reparatur für kommenden Dienstag terminiert."
-      },
-      {
-        id: 2,
-        title: "Defekte Straßenlaterne",
-        category: "Beleuchtung",
-        district: "Frei-Weinheim",
-        address: "Rheinstraße 88, 55218 Ingelheim",
-        status: "erledigt",
-        date: "28.10.2026",
-        likes: 5,
-        userLiked: false,
-        desc: "Leuchte flackert ständig und fällt nachts komplett aus.",
-        img: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&q=80&w=600",
-        afterImg: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=600",
-        officialNote: "Leuchtmittel wurde durch das Tiefbauamt ausgetauscht."
-      },
-      {
-        id: 3,
-        title: "Wilder Müll am Spielplatz",
-        category: "Sauberkeit",
-        district: "Wackernheim",
-        address: "Dorn-Dürkheimer Str., 55218 Ingelheim",
-        status: "eingegangen",
-        date: "31.10.2026",
-        likes: 19,
-        userLiked: false,
-        desc: "Mehrere Müllsäcke und Altreifen neben den Abfallbehältern abgestellt.",
-        img: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&q=80&w=600",
-        officialNote: null
-      }
-    ];
+            <!-- Game Header & Deck Counter -->
+            <div class="bg-gradient-to-r from-red-600 via-amber-500 to-blue-600 p-2 border-b-4 border-black text-center relative z-10 shadow-md">
+                <div class="flex justify-between items-center px-1">
+                    <div class="bg-black/90 text-white text-xs font-black px-3 py-1 rounded-full border-2 border-yellow-400 flex items-center gap-1">
+                        <i id="p1-icon" class="fa-solid fa-user text-blue-400"></i> <span id="p1-label">SPIELER 1</span>: <span id="player-count" class="text-yellow-400 text-sm">8</span>
+                    </div>
 
-    function App() {
+                    <div class="text-center">
+                        <h1 class="comic-font text-xl sm:text-2xl text-yellow-300 italic drop-shadow-[0_2px_0_#000] tracking-wider">
+                            POLITIK TRUMPF
+                        </h1>
+                    </div>
+
+                    <div class="bg-black/90 text-white text-xs font-black px-3 py-1 rounded-full border-2 border-yellow-400 flex items-center gap-1">
+                        <span id="p2-label">KI</span>: <span id="cpu-count" class="text-red-400 text-sm">8</span> <i id="p2-icon" class="fa-solid fa-robot text-red-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Playfield -->
+            <div class="flex-1 p-2 sm:p-3 flex flex-col justify-between relative bg-yellow-50/70 overflow-y-auto">
+                
+                <!-- Status & Turn Banner -->
+                <div class="flex gap-2 items-center">
+                    <div id="turn-banner" class="flex-1 bg-yellow-400 text-black font-black text-xs sm:text-sm py-1 px-3 rounded-xl border-2 border-black text-center shadow-[0_2px_0_#000]">
+                        👉 SPIELER 1 AM ZUG! Wähle eine Kategorie:
+                    </div>
+                    <!-- Umfrage Joker Button -->
+                    <button id="btn-joker" onclick="useJoker()" class="bg-amber-400 hover:bg-amber-300 text-black p-1.5 rounded-xl border-2 border-black text-xs font-black shadow-[0_2px_0_#000] flex items-center gap-1" title="Umfrage-Joker: Zeigt Gewinnchancen">
+                        <i class="fa-solid fa-chart-pie text-red-600 text-sm"></i> <span id="joker-count">2</span>
+                    </button>
+                </div>
+
+                <!-- Active Player Trump Card -->
+                <div class="card-container w-full my-auto flex justify-center">
+                    <div id="player-card" class="trump-card w-full bg-white border-4 border-black rounded-3xl p-3 shadow-[0_6px_0_#000] relative transition-transform duration-200">
+                        <!-- Card Header (Name & Title) -->
+                        <div id="card-header" class="rounded-2xl p-2 border-2 border-black text-white flex justify-between items-center mb-1.5 shadow-sm bg-red-600">
+                            <div>
+                                <h2 id="card-name" class="comic-font text-lg leading-tight drop-shadow-[0_1.5px_0_#000]">OLAF SCHOLZ</h2>
+                                <p id="card-party" class="text-[10px] font-black tracking-wider text-yellow-300">SPD • BUNDESKANZLER</p>
+                            </div>
+                            <span id="card-code" class="comic-font text-xl bg-black text-yellow-400 px-2 py-0.5 rounded-lg border border-yellow-400">A1</span>
+                        </div>
+
+                        <!-- Card Art & Speech Bubble -->
+                        <div class="relative w-full h-32 bg-gradient-to-b from-amber-100 to-amber-200 rounded-2xl border-2 border-black flex items-center justify-center p-1 overflow-hidden mb-1.5 cursor-pointer" onclick="zoomCard()">
+                            <div id="card-svg" class="w-24 h-24 drop-shadow-md"></div>
+                            <!-- Dynamic Quote Toast -->
+                            <div id="card-quote-toast" class="absolute bottom-1 right-2 left-2 bg-white/95 border-2 border-black rounded-xl p-1 text-[10px] font-bold text-black text-center shadow-md comic-font text-red-600">
+                                "Doppel-Wumms!"
+                            </div>
+                        </div>
+
+                        <!-- Card Stats List (6 Interactive Categories) -->
+                        <div class="space-y-1 text-xs font-black">
+                            <div onclick="playTurn('beliebtheit')" class="stat-row bg-slate-100 p-1.5 rounded-xl border-2 border-black flex justify-between items-center">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-heart text-red-500"></i> Beliebtheit</span>
+                                <div class="flex items-center gap-1">
+                                    <span id="hint-beliebtheit" class="hidden text-[10px] px-1 rounded border border-black">--</span>
+                                    <span id="stat-beliebtheit" class="bg-white px-2 py-0.5 rounded-lg border border-black text-xs sm:text-sm">35 %</span>
+                                </div>
+                            </div>
+
+                            <div onclick="playTurn('vermoegen')" class="stat-row bg-slate-100 p-1.5 rounded-xl border-2 border-black flex justify-between items-center">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-wallet text-emerald-600"></i> Vermögen</span>
+                                <div class="flex items-center gap-1">
+                                    <span id="hint-vermoegen" class="hidden text-[10px] px-1 rounded border border-black">--</span>
+                                    <span id="stat-vermoegen" class="bg-white px-2 py-0.5 rounded-lg border border-black text-xs sm:text-sm">1.8 Mio €</span>
+                                </div>
+                            </div>
+
+                            <div onclick="playTurn('followers')" class="stat-row bg-slate-100 p-1.5 rounded-xl border-2 border-black flex justify-between items-center">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-users text-purple-500"></i> Social Media</span>
+                                <div class="flex items-center gap-1">
+                                    <span id="hint-followers" class="hidden text-[10px] px-1 rounded border border-black">--</span>
+                                    <span id="stat-followers" class="bg-white px-2 py-0.5 rounded-lg border border-black text-xs sm:text-sm">450 K</span>
+                                </div>
+                            </div>
+
+                            <div onclick="playTurn('tempo')" class="stat-row bg-slate-100 p-1.5 rounded-xl border-2 border-black flex justify-between items-center">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-gauge-high text-blue-500"></i> Redetempo</span>
+                                <div class="flex items-center gap-1">
+                                    <span id="hint-tempo" class="hidden text-[10px] px-1 rounded border border-black">--</span>
+                                    <span id="stat-tempo" class="bg-white px-2 py-0.5 rounded-lg border border-black text-xs sm:text-sm">75 WPM</span>
+                                </div>
+                            </div>
+
+                            <div onclick="playTurn('skandal')" class="stat-row bg-slate-100 p-1.5 rounded-xl border-2 border-black flex justify-between items-center">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-masks-theater text-amber-600"></i> Skandal-Faktor</span>
+                                <div class="flex items-center gap-1">
+                                    <span id="hint-skandal" class="hidden text-[10px] px-1 rounded border border-black">--</span>
+                                    <span id="stat-skandal" class="bg-white px-2 py-0.5 rounded-lg border border-black text-xs sm:text-sm">70 / 100</span>
+                                </div>
+                            </div>
+
+                            <div onclick="playTurn('erfahrung')" class="stat-row bg-slate-100 p-1.5 rounded-xl border-2 border-black flex justify-between items-center">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-award text-amber-500"></i> Dienstjahre</span>
+                                <div class="flex items-center gap-1">
+                                    <span id="hint-erfahrung" class="hidden text-[10px] px-1 rounded border border-black">--</span>
+                                    <span id="stat-erfahrung" class="bg-white px-2 py-0.5 rounded-lg border border-black text-xs sm:text-sm">26 Jahre</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Handover Screen for 2 Player Mode -->
+                <div id="handover-screen" class="hidden absolute inset-0 bg-slate-900/95 z-40 p-4 flex flex-col items-center justify-center text-center">
+                    <div class="text-6xl mb-3">📱🤝📱</div>
+                    <h3 class="comic-font text-2xl text-yellow-400 mb-2">GERÄT WEITERGEBEN!</h3>
+                    <p id="handover-text" class="text-white text-sm mb-6 font-bold">Gib das Smartphone an Spieler 2 weiter. Nicht linsen!</p>
+                    <button onclick="confirmHandover()" class="bg-emerald-500 hover:bg-emerald-400 text-white comic-font text-xl py-3 px-8 rounded-2xl border-3 border-black shadow-[0_4px_0_#000]">
+                        ICH BIN BEREIT!
+                    </button>
+                </div>
+
+                <!-- Opponent Card Reveal Overlay during Battle -->
+                <div id="cpu-card-overlay" class="hidden absolute inset-0 bg-black/85 z-30 p-2 sm:p-4 flex flex-col items-center justify-center">
+                    <div class="comic-font text-yellow-400 text-2xl mb-2 text-center drop-shadow-[0_2px_0_#000]">
+                        ⚔️ DUELL VERGLEICH ⚔️
+                    </div>
+                    
+                    <!-- Side by Side Duel Arena -->
+                    <div class="w-full flex gap-2 items-center justify-center mb-3">
+                        <!-- Player Mini Card -->
+                        <div class="w-1/2 bg-white border-3 border-black rounded-2xl p-2 text-center shadow-md">
+                            <span id="duel-p1-tag" class="text-[9px] font-black bg-blue-600 text-white px-2 py-0.5 rounded-full">SPIELER 1</span>
+                            <h4 id="duel-p-name" class="comic-font text-xs truncate mt-1">OLAF SCHOLZ</h4>
+                            <div id="duel-p-val" class="text-sm font-black text-emerald-600 mt-1 bg-slate-100 rounded border border-black p-0.5">42 %</div>
+                        </div>
+
+                        <!-- VS Badge -->
+                        <div class="comic-font text-red-500 text-xl drop-shadow-[0_1.5px_0_#000]">VS</div>
+
+                        <!-- CPU / Player 2 Mini Card -->
+                        <div class="w-1/2 bg-white border-3 border-black rounded-2xl p-2 text-center shadow-md">
+                            <span id="duel-p2-tag" class="text-[9px] font-black bg-red-600 text-white px-2 py-0.5 rounded-full">KI GEGNER</span>
+                            <h4 id="duel-c-name" class="comic-font text-xs truncate mt-1">ROBERT HABECK</h4>
+                            <div id="duel-c-val" class="text-sm font-black text-red-600 mt-1 bg-slate-100 rounded border border-black p-0.5">65 %</div>
+                        </div>
+                    </div>
+
+                    <!-- Duel Outcome Banner -->
+                    <div id="duel-result-box" class="bg-yellow-300 border-3 border-black rounded-2xl p-2 text-center w-full max-w-xs mb-3 shadow-md">
+                        <div id="duel-cat-title" class="text-xs font-black text-slate-800">Kategorie: Beliebtheit</div>
+                        <div id="duel-outcome-text" class="comic-font text-lg text-black mt-0.5">SIEG FÜR DICH! 🎉</div>
+                    </div>
+
+                    <button id="btn-next-round" onclick="nextRound()" class="w-full max-w-xs bg-emerald-500 hover:bg-emerald-400 text-white comic-font text-lg py-2.5 px-6 rounded-2xl border-3 border-black shadow-[0_4px_0_#000]">
+                        NÄCHSTE RUNDE ➔
+                    </button>
+                </div>
+
+                <!-- Bottom Controls Bar -->
+                <div class="mt-1 pt-1 border-t-2 border-black/20 flex justify-between items-center">
+                    <button onclick="openMenuModal()" class="bg-red-500 hover:bg-red-400 text-white font-black py-1.5 px-3 rounded-xl border-2 border-black text-xs shadow-[0_2.5px_0_#000] flex items-center gap-1">
+                        <i class="fa-solid fa-bars"></i> Menü
+                    </button>
+
+                    <div class="text-[10px] font-black text-slate-700 bg-white px-2 py-1 rounded-lg border border-black">
+                        Runde: <span id="round-num" class="text-black text-xs">1</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mode Selection & Start Menu Modal -->
+            <div id="menu-modal" class="absolute inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+                <div class="bg-white border-4 border-black rounded-3xl p-5 w-full text-center shadow-[0_8px_0_#000] space-y-4">
+                    <h2 class="comic-font text-3xl text-yellow-500 drop-shadow-[0_2px_0_#000]">POLITIK TRUMPF</h2>
+                    <p class="font-bold text-slate-700 text-xs">Wähle deinen Spielmodus:</p>
+                    
+                    <div class="space-y-3">
+                        <button onclick="startGameMode('vs_cpu')" class="w-full bg-blue-500 hover:bg-blue-400 text-white comic-font text-lg py-3 rounded-2xl border-3 border-black shadow-[0_4px_0_#000] flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-robot"></i> 1 SPIELER (VS. KI)
+                        </button>
+                        <button onclick="startGameMode('vs_player')" class="w-full bg-amber-500 hover:bg-amber-400 text-white comic-font text-lg py-3 rounded-2xl border-3 border-black shadow-[0_4px_0_#000] flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-users"></i> 2 SPIELER (PASS & PLAY)
+                        </button>
+                        <button onclick="openOnlineLobby()" class="w-full bg-purple-600 hover:bg-purple-500 text-white comic-font text-lg py-3 rounded-2xl border-3 border-black shadow-[0_4px_0_#000] flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-globe"></i> ONLINE MULTIPLAYER 🌐
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Online Lobby Modal -->
+            <div id="online-modal" class="hidden absolute inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+                <div class="bg-white border-4 border-black rounded-3xl p-5 w-full text-center shadow-[0_8px_0_#000] space-y-4">
+                    <h2 class="comic-font text-2xl text-purple-600 drop-shadow-[0_2px_0_#000]">ONLINE LOBBY</h2>
+                    <p class="font-bold text-slate-700 text-xs">Erstelle ein Spiel oder tritt mit einem Raum-Code bei:</p>
+                    
+                    <div class="space-y-3">
+                        <button onclick="createOnlineRoom()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-white comic-font text-base py-2.5 rounded-2xl border-3 border-black shadow-[0_3px_0_#000]">
+                            RAUM ERSTELLEN ➕
+                        </button>
+                        <div class="flex gap-2">
+                            <input id="room-code-input" type="text" placeholder="CODE (z.B. 1234)" class="w-2/3 border-3 border-black rounded-xl p-2 text-center comic-font uppercase">
+                            <button onclick="joinOnlineRoom()" class="w-1/3 bg-purple-500 hover:bg-purple-400 text-white comic-font text-sm py-2 rounded-xl border-3 border-black shadow-[0_3px_0_#000]">
+                                BEITRETEN
+                            </button>
+                        </div>
+                        <div id="online-status" class="text-xs font-black text-slate-600 min-h-[20px]"></div>
+                        <button onclick="closeOnlineLobby()" class="w-full bg-slate-400 hover:bg-slate-300 text-black font-black text-xs py-2 rounded-xl border-2 border-black">
+                            ZURÜCK
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Over Victory/Defeat Modal -->
+            <div id="game-over-modal" class="hidden absolute inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+                <div class="bg-white border-4 border-black rounded-3xl p-5 w-full text-center shadow-[0_8px_0_#000] space-y-4">
+                    <h2 id="modal-title" class="comic-font text-3xl text-yellow-500 drop-shadow-[0_2px_0_#000]">POLITIK TRUMPF!</h2>
+                    <p id="modal-desc" class="font-bold text-slate-700 text-sm">Du hast alle Polit-Karten erobert und regierst nun das Parlament!</p>
+                    <div id="modal-emoji" class="text-5xl">🏆</div>
+
+                    <button onclick="openMenuModal()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-white comic-font text-xl py-3 rounded-2xl border-3 border-black shadow-[0_4px_0_#000]">
+                        HAUPTMENÜ ➔
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Web Audio & Trumpf Game Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'politik-trumpf';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        
+        let db = null;
+        let auth = null;
+        let roomRef = null;
+        let unsubscribeRoom = null;
+        let currentRoomId = null;
+        let isHost = false;
+
+        if (firebaseConfig) {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            if (typeof __initial_auth_token !== 'undefined') {
+                signInWithCustomToken(auth, __initial_auth_token).catch(() => signInAnonymously(auth));
+            } else {
+                signInAnonymously(auth);
+            }
+        }
+
+        window.openOnlineLobby = () => {
+            sound.click();
+            document.getElementById('menu-modal').classList.add('hidden');
+            document.getElementById('online-modal').classList.remove('hidden');
+        };
+
+        window.closeOnlineLobby = () => {
+            sound.click();
+            document.getElementById('online-modal').classList.add('hidden');
+            document.getElementById('menu-modal').classList.remove('hidden');
+        };
+
+        window.createOnlineRoom = async () => {
+            if (!db) {
+                document.getElementById('online-status').innerText = "Online-Dienst nicht verfügbar!";
+                return;
+            }
+            sound.click();
+            const code = Math.floor(1000 + Math.random() * 9000).toString();
+            currentRoomId = code;
+            isHost = true;
+            document.getElementById('online-status').innerText = `Raum erstellt! Code: ${code} - Warte auf Mitspieler...`;
+
+            const shuffled = [...CARDS_DATABASE].sort(() => Math.random() - 0.5);
+            const p1Deck = shuffled.slice(0, 8);
+            const p2Deck = shuffled.slice(8, 16);
+
+            roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
+            await setDoc(roomRef, {
+                p1Deck: p1Deck,
+                p2Deck: p2Deck,
+                turn: 'p1',
+                round: 1,
+                status: 'waiting',
+                lastCategory: null,
+                lastResult: null
+            });
+
+            listenToRoom(code);
+        };
+
+        window.joinOnlineRoom = async () => {
+            const code = document.getElementById('room-code-input').value.trim();
+            if (!code || !db) return;
+            sound.click();
+            currentRoomId = code;
+            isHost = false;
+            document.getElementById('online-status').innerText = "Verbinde mit Raum " + code + "...";
+
+            roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
+            await updateDoc(roomRef, { status: 'playing' }).catch(() => {
+                document.getElementById('online-status').innerText = "Raum nicht gefunden!";
+            });
+
+            listenToRoom(code);
+        };
+
+        function listenToRoom(code) {
+            if (unsubscribeRoom) unsubscribeRoom();
+            roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
+            
+            unsubscribeRoom = onSnapshot(roomRef, (snapshot) => {
+                const data = snapshot.data();
+                if (!data) return;
+
+                if (data.status === 'playing' || data.status === 'waiting') {
+                    if (data.status === 'playing' && document.getElementById('online-modal').className.includes('hidden') === false) {
+                        document.getElementById('online-modal').classList.add('hidden');
+                        gameMode = 'online';
+                        document.getElementById('p1-label').innerText = isHost ? 'DU' : 'GEGNER';
+                        document.getElementById('p2-label').innerText = isHost ? 'GEGNER' : 'DU';
+                    }
+
+                    playerDeck = isHost ? data.p1Deck : data.p2Deck;
+                    cpuDeck = isHost ? data.p2Deck : data.p1Deck;
+                    isPlayerTurn = (data.turn === 'p1' && isHost) || (data.turn === 'p2' && !isHost);
+                    currentRound = data.round;
+
+                    renderRound();
+
+                    if (data.lastCategory && data.lastResult && isProcessing === false) {
+                        // Duel sync online
+                    }
+                }
+            }, (error) => {
+                console.error("Online sync error:", error);
+            });
+        }
+    </script>
+    <script>
+        // Audio Synthesizer Toggleable
+        class AudioSynth {
+            constructor() { this.ctx = null; this.enabled = true; }
+            init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+            playTone(freq, type = 'sine', duration = 0.15) {
+                if (!this.enabled) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            }
+            click() { this.playTone(520, 'sine', 0.05); }
+            win() {
+                this.playTone(523.25, 'triangle', 0.1);
+                setTimeout(() => this.playTone(659.25, 'triangle', 0.1), 90);
+                setTimeout(() => this.playTone(783.99, 'triangle', 0.25), 180);
+            }
+            lose() {
+                this.playTone(300, 'sawtooth', 0.15);
+                setTimeout(() => this.playTone(200, 'sawtooth', 0.3), 120);
+            }
+            joker() {
+                this.playTone(800, 'sine', 0.1);
+                setTimeout(() => this.playTone(1000, 'sine', 0.15), 100);
+            }
+        }
+        const sound = new AudioSynth();
+
+        function toggleAudio() {
+            sound.enabled = !sound.enabled;
+            const icon = document.getElementById('audio-icon');
+            icon.className = sound.enabled ? "fa-solid fa-volume-high cursor-pointer hover:text-yellow-300" : "fa-solid fa-volume-xmark cursor-pointer text-red-300";
+        }
+
+        // 16 Politiker Trumpf-Karten mit Cartoon SVGs & realen/lustigen Werten
+        const CARDS_DATABASE = [
+            {
+                code: 'A1', name: 'OLAF SCHOLZ', party: 'SPD • KANZLER', color: '#dc2626',
+                quote: 'Doppel-Wumms!',
+                stats: { beliebtheit: 35, vermoegen: 1.8, followers: 450, tempo: 75, skandal: 70, erfahrung: 26 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-scholz" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fee2e2"/><stop offset="100%" stop-color="#fca5a5"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-scholz)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#1e293b" stroke="#000" stroke-width="2.5"/><path d="M 42 65 L 50 78 L 58 65 Z" fill="#fff" stroke="#000" stroke-width="1.5"/><path d="M 48 70 L 52 88 L 48 88 Z" fill="#dc2626"/><path d="M 30 42 Q 22 45 30 54" fill="#fecdd3" stroke="#000" stroke-width="2"/><path d="M 70 42 Q 78 45 70 54" fill="#fecdd3" stroke="#000" stroke-width="2"/><ellipse cx="50" cy="46" rx="22" ry="24" fill="#fecdd3" stroke="#000" stroke-width="3"/><path d="M 28 26 Q 50 20 72 26 Q 66 22 50 21 Q 34 22 28 26 Z" fill="#94a3b8" stroke="#000" stroke-width="1.5"/><ellipse cx="38" cy="42" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="42" r="2" fill="#000"/><polygon points="28,34 46,38 45,47 28,44" fill="#000" stroke="#000" stroke-width="1"/><line x1="28" y1="36" x2="72" y2="28" stroke="#000" stroke-width="2"/><path d="M 47 48 Q 45 53 50 54" fill="none" stroke="#000" stroke-width="2"/><path d="M 38 60 Q 50 68 62 60" fill="none" stroke="#000" stroke-width="3"/><rect x="68" y="60" width="16" height="20" rx="4" fill="#ef4444" stroke="#000" stroke-width="2"/><path d="M 84 66 Q 89 66 89 71 Q 89 76 84 76" fill="none" stroke="#000" stroke-width="2"/><path d="M 72 56 Q 76 50 74 46" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/></svg>`
+            },
+            {
+                code: 'A2', name: 'ROBERT HABECK', party: 'GRÜNE • VIZEKANZLER', color: '#16a34a',
+                quote: 'Windkraft Voran!',
+                stats: { beliebtheit: 48, vermoegen: 1.2, followers: 380, tempo: 110, skandal: 45, erfahrung: 16 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-habeck" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dcfce7"/><stop offset="100%" stop-color="#86efac"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-habeck)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#15803d" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="48" rx="21" ry="23" fill="#fde047" opacity="0.3"/><ellipse cx="50" cy="48" rx="21" ry="23" fill="#fed7aa" stroke="#000" stroke-width="3"/><path d="M 27 38 Q 30 18 50 18 Q 70 18 73 38 Q 66 28 50 26 Q 34 28 27 38 Z" fill="#78350f" stroke="#000" stroke-width="2"/><path d="M 33 58 Q 38 63 50 63 Q 62 63 67 58" fill="#78350f" stroke="#000" stroke-width="1.5" opacity="0.6"/><ellipse cx="38" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="45" r="2" fill="#451a03"/><ellipse cx="62" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="61" cy="45" r="2" fill="#451a03"/><path d="M 37 57 Q 50 65 63 57" fill="none" stroke="#000" stroke-width="2.5"/><line x1="82" y1="20" x2="82" y2="70" stroke="#475569" stroke-width="3"/><circle cx="82" cy="24" r="3" fill="#000"/><path d="M 82 24 L 72 12 M 82 24 L 92 12 M 82 24 L 82 38" stroke="#000" stroke-width="2.5" stroke-linecap="round"/></svg>`
+            },
+            {
+                code: 'B1', name: 'FRIEDRICH MERZ', party: 'CDU • OPPOSITION', color: '#2563eb',
+                quote: 'Privatjet Abflug!',
+                stats: { beliebtheit: 52, vermoegen: 12.0, followers: 290, tempo: 130, skandal: 55, erfahrung: 32 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-merz" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#93c5fd"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-merz)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#1e293b" stroke="#000" stroke-width="2.5"/><path d="M 44 65 L 50 78 L 56 65 Z" fill="#fff"/><path d="M 48 70 L 52 88 L 48 88 Z" fill="#2563eb"/><ellipse cx="50" cy="46" rx="20" ry="25" fill="#ffedd5" stroke="#000" stroke-width="3"/><path d="M 30 25 Q 50 20 70 25 Q 60 22 50 22 Q 40 22 30 25 Z" fill="#cbd5e1" stroke="#000" stroke-width="1.5"/><rect x="30" y="39" width="15" height="11" rx="3" fill="none" stroke="#000" stroke-width="2.5"/><rect x="55" y="39" width="15" height="11" rx="3" fill="none" stroke="#000" stroke-width="2.5"/><line x1="45" y1="44" x2="55" y2="44" stroke="#000" stroke-width="2.5"/><circle cx="37" cy="44" r="2" fill="#000"/><circle cx="63" cy="44" r="2" fill="#000"/><path d="M 36 60 Q 50 72 64 60" fill="none" stroke="#000" stroke-width="3"/><path d="M 70 20 L 90 15 L 85 28 L 78 26 Z" fill="#64748b" stroke="#000" stroke-width="1.5"/></svg>`
+            },
+            {
+                code: 'B2', name: 'MARKUS SÖDER', party: 'CSU • BAYERN CHEF', color: '#0284c7',
+                quote: 'Söder Kebab & Bier!',
+                stats: { beliebtheit: 64, vermoegen: 3.5, followers: 980, tempo: 150, skandal: 40, erfahrung: 28 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-soeder" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#7dd3fc"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-soeder)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#9a3412" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="47" rx="23" ry="24" fill="#fed7aa" stroke="#000" stroke-width="3"/><path d="M 26 36 Q 30 18 50 16 Q 70 18 74 36 Q 64 24 50 24 Q 36 24 26 36 Z" fill="#1e293b" stroke="#000" stroke-width="2"/><ellipse cx="37" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="38" cy="44" r="2" fill="#000"/><ellipse cx="63" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="62" cy="44" r="2" fill="#000"/><path d="M 33 58 Q 50 74 67 58 Z" fill="#b91c1c" stroke="#000" stroke-width="2"/><rect x="68" y="52" width="18" height="26" rx="4" fill="#fbbf24" stroke="#000" stroke-width="2"/><path d="M 68 56 Q 77 50 86 56 L 86 52 L 68 52 Z" fill="#fff" stroke="#000" stroke-width="1"/><path d="M 86 60 Q 92 60 92 66 Q 92 72 86 72" fill="none" stroke="#000" stroke-width="2.5"/></svg>`
+            },
+            {
+                code: 'C1', name: 'CHRISTIAN LINDNER', party: 'FDP • FINANZEN', color: '#eab308',
+                quote: 'Schuldenbremse steht!',
+                stats: { beliebtheit: 38, vermoegen: 4.2, followers: 620, tempo: 160, skandal: 60, erfahrung: 22 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-lindner" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fef9c3"/><stop offset="100%" stop-color="#fde047"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-lindner)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#0f172a" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="46" rx="20" ry="24" fill="#ffedd5" stroke="#000" stroke-width="3"/><path d="M 28 32 Q 35 15 50 18 Q 65 15 72 32 Q 62 25 50 26 Q 38 25 28 32 Z" fill="#475569" stroke="#000" stroke-width="2"/><ellipse cx="38" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="44" r="2" fill="#000"/><ellipse cx="62" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="61" cy="44" r="2" fill="#000"/><path d="M 38 58 Q 50 66 62 58" fill="none" stroke="#000" stroke-width="3"/><path d="M 72 68 L 86 64 L 84 76 Z" fill="#ef4444" stroke="#000" stroke-width="1.5"/><circle cx="85" cy="74" r="4" fill="#fbbf24" stroke="#000" stroke-width="1"/></svg>`
+            },
+            {
+                code: 'C2', name: 'KARL LAUTERBACH', party: 'SPD • GESUNDHEIT', color: '#ef4444',
+                quote: 'Wissenschaft wirkt!',
+                stats: { beliebtheit: 55, vermoegen: 2.1, followers: 850, tempo: 180, skandal: 35, erfahrung: 19 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-lauterbach" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fee2e2"/><stop offset="100%" stop-color="#fca5a5"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-lauterbach)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#1e293b" stroke="#000" stroke-width="2.5"/><polygon points="42,67 50,72 58,67 50,77" fill="#dc2626" stroke="#000" stroke-width="1.5"/><ellipse cx="50" cy="46" rx="20" ry="24" fill="#fecdd3" stroke="#000" stroke-width="3"/><path d="M 26 30 Q 32 15 50 16 Q 68 15 74 30 Q 64 22 50 22 Q 36 22 26 30 Z" fill="#78350f" stroke="#000" stroke-width="2"/><circle cx="37" cy="44" r="7.5" fill="none" stroke="#000" stroke-width="2.5"/><circle cx="63" cy="44" r="7.5" fill="none" stroke="#000" stroke-width="2.5"/><line x1="44.5" y1="44" x2="55.5" y2="44" stroke="#000" stroke-width="2.5"/><circle cx="37" cy="44" r="2" fill="#000"/><circle cx="63" cy="44" r="2" fill="#000"/><path d="M 40 58 Q 50 66 60 58" fill="none" stroke="#000" stroke-width="2.5"/><rect x="74" y="54" width="10" height="24" rx="4" fill="#38bdf8" stroke="#000" stroke-width="2" opacity="0.9"/><path d="M 76 50 L 82 50 L 82 54 L 76 54 Z" fill="#cbd5e1" stroke="#000" stroke-width="1.5"/><path d="M 77 46 Q 79 40 82 43" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/></svg>`
+            },
+            {
+                code: 'D1', name: 'SAHRA WAGENKNECHT', party: 'BSW • PARTEICHEFIN', color: '#9333ea',
+                quote: 'Frieden & Vernunft!',
+                stats: { beliebtheit: 58, vermoegen: 2.8, followers: 790, tempo: 140, skandal: 65, erfahrung: 25 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-sahra" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f3e8ff"/><stop offset="100%" stop-color="#d8b4fe"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-sahra)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#581c87" stroke="#000" stroke-width="2.5"/><path d="M 22 28 Q 50 10 78 28 Q 85 58 75 75 Q 50 82 25 75 Z" fill="#1e1b4b" stroke="#000" stroke-width="3"/><ellipse cx="50" cy="48" rx="19" ry="22" fill="#fed7aa" stroke="#000" stroke-width="2.5"/><ellipse cx="39" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="40" cy="45" r="2" fill="#000"/><ellipse cx="61" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="60" cy="45" r="2" fill="#000"/><path d="M 37 58 Q 50 68 63 58 Z" fill="#dc2626" stroke="#000" stroke-width="1.5"/></svg>`
+            },
+            {
+                code: 'D2', name: 'ANNALENA BAERBOCK', party: 'GRÜNE • AUSSEN', color: '#10b981',
+                quote: 'Feministische Außenpolitik!',
+                stats: { beliebtheit: 45, vermoegen: 1.5, followers: 510, tempo: 125, skandal: 50, erfahrung: 14 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-baerbock" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a7f3d0"/><stop offset="100%" stop-color="#6ee7b7"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-baerbock)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#047857" stroke="#000" stroke-width="2.5"/><path d="M 24 32 Q 50 14 76 32 Q 82 58 74 74 Z" fill="#451a03" stroke="#000" stroke-width="3"/><ellipse cx="50" cy="48" rx="19" ry="22" fill="#ffedd5" stroke="#000" stroke-width="2.5"/><ellipse cx="39" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="40" cy="45" r="2" fill="#000"/><ellipse cx="61" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="60" cy="45" r="2" fill="#000"/><path d="M 38 58 Q 50 67 62 58" fill="none" stroke="#000" stroke-width="2.5"/><circle cx="74" cy="70" r="9" fill="#38bdf8" stroke="#000" stroke-width="2"/><path d="M 68 70 Q 74 64 80 70" fill="none" stroke="#15803d" stroke-width="1.5"/></svg>`
+            },
+            {
+                code: 'E1', name: 'BORIS PISTORIUS', party: 'SPD • VERTEIDIGUNG', color: '#475569',
+                quote: 'Zeitenwende Bundeswehr!',
+                stats: { beliebtheit: 72, vermoegen: 1.9, followers: 310, tempo: 115, skandal: 20, erfahrung: 27 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-pistorius" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-pistorius)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#1e293b" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="47" rx="21" ry="24" fill="#fecdd3" stroke="#000" stroke-width="3"/><path d="M 26 32 Q 34 18 50 18 Q 66 18 74 32 Q 62 25 50 25 Q 38 25 26 32 Z" fill="#64748b" stroke="#000" stroke-width="2"/><ellipse cx="38" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="44" r="2" fill="#000"/><ellipse cx="62" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="61" cy="44" r="2" fill="#000"/><path d="M 37 58 Q 50 66 63 58" fill="none" stroke="#000" stroke-width="3"/><rect x="70" y="60" width="18" height="18" rx="3" fill="#16a34a" stroke="#000" stroke-width="2"/><path d="M 72 64 L 86 64 M 72 69 L 86 69 M 72 74 L 86 74" stroke="#15803d" stroke-width="2"/></svg>`
+            },
+            {
+                code: 'E2', name: 'ALICE WEIDEL', party: 'AfD • OPPOSITION', color: '#0284c7',
+                quote: 'Alternative im Bundestag!',
+                stats: { beliebtheit: 30, vermoegen: 3.1, followers: 880, tempo: 145, skandal: 85, erfahrung: 11 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-weidel" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#bae6fd"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-weidel)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#0369a1" stroke="#000" stroke-width="2.5"/><path d="M 24 30 Q 50 14 76 30 Q 82 54 74 72 Z" fill="#f8fafc" stroke="#000" stroke-width="3"/><ellipse cx="50" cy="48" rx="19" ry="22" fill="#ffedd5" stroke="#000" stroke-width="2.5"/><ellipse cx="39" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="40" cy="45" r="2" fill="#000"/><ellipse cx="61" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="60" cy="45" r="2" fill="#000"/><path d="M 38 58 Q 50 54 62 58" fill="none" stroke="#000" stroke-width="2.5"/></svg>`
+            },
+            {
+                code: 'F1', name: 'NANCY FAESER', party: 'SPD • INNENMINISTERIN', color: '#b91c1c',
+                quote: 'Sicherheit im Land!',
+                stats: { beliebtheit: 33, vermoegen: 1.4, followers: 190, tempo: 105, skandal: 62, erfahrung: 21 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-faeser" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fecdd3"/><stop offset="100%" stop-color="#fda4af"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-faeser)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#991b1b" stroke="#000" stroke-width="2.5"/><path d="M 24 32 Q 50 16 76 32 Q 80 56 74 72 Z" fill="#b91c1c" stroke="#000" stroke-width="3"/><ellipse cx="50" cy="48" rx="19" ry="22" fill="#fed7aa" stroke="#000" stroke-width="2.5"/><ellipse cx="39" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="40" cy="45" r="2" fill="#000"/><ellipse cx="61" cy="45" rx="3.5" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="60" cy="45" r="2" fill="#000"/><path d="M 38 58 Q 50 64 62 58" fill="none" stroke="#000" stroke-width="2.5"/></svg>`
+            },
+            {
+                code: 'F2', name: 'HUBERT AIWANGER', party: 'FREIE WÄHLER • BAYERN', color: '#f59e0b',
+                quote: 'Freie Wähler Power!',
+                stats: { beliebtheit: 50, vermoegen: 2.3, followers: 410, tempo: 135, skandal: 78, erfahrung: 18 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-aiwanger" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fef3c7"/><stop offset="100%" stop-color="#fde047"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-aiwanger)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#b45309" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="47" rx="21" ry="24" fill="#ffedd5" stroke="#000" stroke-width="3"/><path d="M 26 32 Q 35 18 50 18 Q 65 18 74 32 Q 62 25 50 25 Q 38 25 26 32 Z" fill="#78350f" stroke="#000" stroke-width="2"/><ellipse cx="38" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="44" r="2" fill="#000"/><ellipse cx="62" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="61" cy="44" r="2" fill="#000"/><path d="M 35 58 Q 50 72 65 58" fill="none" stroke="#000" stroke-width="3"/></svg>`
+            },
+            {
+                code: 'G1', name: 'VOLKER WISSING', party: 'VERKEHR • DIGITALES', color: '#3b82f6',
+                quote: 'Digitalisierung läuft!',
+                stats: { beliebtheit: 41, vermoegen: 1.7, followers: 230, tempo: 112, skandal: 42, erfahrung: 17 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-wissing" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#93c5fd"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-wissing)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#1d4ed8" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="47" rx="20" ry="24" fill="#fecdd3" stroke="#000" stroke-width="3"/><path d="M 27 30 Q 35 16 50 18 Q 65 16 73 30 Q 62 23 50 24 Q 38 23 27 30 Z" fill="#334155" stroke="#000" stroke-width="2"/><ellipse cx="38" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="44" r="2" fill="#000"/><ellipse cx="62" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="61" cy="44" r="2" fill="#000"/><path d="M 38 58 Q 50 65 62 58" fill="none" stroke="#000" stroke-width="2.5"/></svg>`
+            },
+            {
+                code: 'G2', name: 'MARCO BUSCHMANN', party: 'JUSTIZMINISTER', color: '#eab308',
+                quote: 'Rechtsstaat sichern!',
+                stats: { beliebtheit: 44, vermoegen: 1.6, followers: 280, tempo: 128, skandal: 30, erfahrung: 15 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-buschmann" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#fde047"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-buschmann)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#854d0e" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="47" rx="20" ry="24" fill="#ffedd5" stroke="#000" stroke-width="3"/><path d="M 27 32 Q 35 18 50 18 Q 65 18 73 32 Q 62 25 50 25 Q 38 25 27 32 Z" fill="#71717a" stroke="#000" stroke-width="2"/><circle cx="37" cy="44" r="6" fill="none" stroke="#000" stroke-width="2"/><circle cx="63" cy="44" r="6" fill="none" stroke="#000" stroke-width="2"/><line x1="43" y1="44" x2="57" y2="44" stroke="#000" stroke-width="2"/><circle cx="37" cy="44" r="2" fill="#000"/><circle cx="63" cy="44" r="2" fill="#000"/><path d="M 38 58 Q 50 65 62 58" fill="none" stroke="#000" stroke-width="2.5"/></svg>`
+            },
+            {
+                code: 'H1', name: 'TINO CHRUPALLA', party: 'AfD • OPPOSITION', color: '#0284c7',
+                quote: 'Klartext sprechen!',
+                stats: { beliebtheit: 28, vermoegen: 1.3, followers: 340, tempo: 118, skandal: 82, erfahrung: 10 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-chrupalla" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0f2fe"/><stop offset="100%" stop-color="#7dd3fc"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-chrupalla)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#0369a1" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="47" rx="21" ry="24" fill="#ffedd5" stroke="#000" stroke-width="3"/><path d="M 26 34 Q 35 20 50 20 Q 65 20 74 34 Q 62 26 50 26 Q 38 26 26 34 Z" fill="#451a03" stroke="#000" stroke-width="2"/><ellipse cx="38" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="44" r="2" fill="#000"/><ellipse cx="62" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="61" cy="44" r="2" fill="#000"/><path d="M 37 58 Q 50 54 63 58" fill="none" stroke="#000" stroke-width="2.5"/></svg>`
+            },
+            {
+                code: 'H2', name: 'HENDRIK WÜST', party: 'CDU • NRW CHEF', color: '#2563eb',
+                quote: 'Zukunft NRW!',
+                stats: { beliebtheit: 60, vermoegen: 2.2, followers: 390, tempo: 122, skandal: 25, erfahrung: 20 },
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><defs><linearGradient id="bg-wuest" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#60a5fa"/></linearGradient></defs><circle cx="50" cy="50" r="44" fill="url(#bg-wuest)" stroke="#000" stroke-width="3"/><path d="M 28 65 L 72 65 L 68 94 L 32 94 Z" fill="#1d4ed8" stroke="#000" stroke-width="2.5"/><ellipse cx="50" cy="47" rx="20" ry="24" fill="#fecdd3" stroke="#000" stroke-width="3"/><path d="M 27 30 Q 35 15 50 16 Q 65 15 73 30 Q 62 23 50 24 Q 38 23 27 30 Z" fill="#1e293b" stroke="#000" stroke-width="2"/><ellipse cx="38" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="39" cy="44" r="2" fill="#000"/><ellipse cx="62" cy="44" rx="4" ry="4" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="61" cy="44" r="2" fill="#000"/><path d="M 37 58 Q 50 67 63 58" fill="none" stroke="#000" stroke-width="3"/></svg>`
+            }
+        ];
+
+        // Game State
+        let playerDeck = [];
+        let cpuDeck = [];
+        let currentRound = 1;
+        let isPlayerTurn = true;
+        let isProcessing = false;
+        let jokersAvailable = 2;
+        let gameMode = 'vs_cpu'; // 'vs_cpu' or 'vs_player'
+        let pendingTurnSwitch = false;
+
+        function updateClock() {
+            const now = new Date();
+            const hrs = String(now.getHours()).padStart(2, '0');
+            const mins = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('android-time').innerText = `${hrs}:${mins}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function openMenuModal() {
+            sound.click();
+            document.getElementById('menu-modal').classList.remove('hidden');
+        }
+
+        function startGameMode(mode) {
+            gameMode = mode;
+            sound.click();
+            document.getElementById('menu-modal').classList.add('hidden');
+            
+            if (gameMode === 'vs_player') {
+                document.getElementById('p1-label').innerText = 'SPIELER 1';
+                document.getElementById('p2-label').innerText = 'SPIELER 2';
+                document.getElementById('p1-icon').className = 'fa-solid fa-user text-blue-400';
+                document.getElementById('p2-icon').className = 'fa-solid fa-user text-red-400';
+                document.getElementById('duel-p1-tag').innerText = 'SPIELER 1';
+                document.getElementById('duel-p2-tag').innerText = 'SPIELER 2';
+            } else {
+                document.getElementById('p1-label').innerText = 'DU';
+                document.getElementById('p2-label').innerText = 'KI';
+                document.getElementById('p1-icon').className = 'fa-solid fa-user text-blue-400';
+                document.getElementById('p2-icon').className = 'fa-solid fa-robot text-red-400';
+                document.getElementById('duel-p1-tag').innerText = 'DU';
+                document.getElementById('duel-p2-tag').innerText = 'KI GEGNER';
+            }
+            restartGame();
+        }
+
+        function restartGame() {
+            currentRound = 1;
+            isPlayerTurn = true;
+            isProcessing = false;
+            jokersAvailable = 2;
+            document.getElementById('joker-count').innerText = jokersAvailable;
+
+            // Shuffle and split deck evenly
+            const shuffled = [...CARDS_DATABASE].sort(() => Math.random() - 0.5);
+            playerDeck = shuffled.slice(0, 8);
+            cpuDeck = shuffled.slice(8, 16);
+
+            document.getElementById('game-over-modal').classList.add('hidden');
+            document.getElementById('cpu-card-overlay').classList.add('hidden');
+
+            renderRound();
+        }
+
+        function hideJokerHints() {
+            const cats = ['beliebtheit', 'vermoegen', 'followers', 'tempo', 'skandal', 'erfahrung'];
+            cats.forEach(c => {
+                const el = document.getElementById(`hint-${c}`);
+                if (el) el.classList.add('hidden');
+            });
+        }
+
+        function useJoker() {
+            if (jokersAvailable <= 0 || (gameMode === 'vs_cpu' && !isPlayerTurn) || isProcessing) return;
+            jokersAvailable--;
+            document.getElementById('joker-count').innerText = jokersAvailable;
+            sound.joker();
+
+            const pCard = isPlayerTurn ? playerDeck[0] : cpuDeck[0];
+            const cCard = isPlayerTurn ? cpuDeck[0] : playerDeck[0];
+
+            const cats = ['beliebtheit', 'vermoegen', 'followers', 'tempo', 'skandal', 'erfahrung'];
+            cats.forEach(c => {
+                const el = document.getElementById(`hint-${c}`);
+                if (el) {
+                    el.classList.remove('hidden');
+                    if (pCard.stats[c] > cCard.stats[c]) {
+                        el.innerText = 'WIN';
+                        el.className = 'text-[10px] bg-emerald-400 font-bold px-1 rounded border border-black text-black';
+                    } else if (pCard.stats[c] < cCard.stats[c]) {
+                        el.innerText = 'LOSE';
+                        el.className = 'text-[10px] bg-red-400 font-bold px-1 rounded border border-black text-white';
+                    } else {
+                        el.innerText = 'TIE';
+                        el.className = 'text-[10px] bg-yellow-300 font-bold px-1 rounded border border-black text-black';
+                    }
+                }
+            });
+        }
+
+        function renderRound() {
+            hideJokerHints();
+            document.getElementById('player-count').innerText = playerDeck.length;
+            document.getElementById('cpu-count').innerText = cpuDeck.length;
+            document.getElementById('round-num').innerText = currentRound;
+
+            if (playerDeck.length === 0) {
+                showGameOver(false);
+                return;
+            }
+            if (cpuDeck.length === 0) {
+                showGameOver(true);
+                return;
+            }
+
+            const activeDeck = isPlayerTurn ? playerDeck : cpuDeck;
+            const currentCard = activeDeck[0];
+            const pCardEl = document.getElementById('player-card');
+
+            pCardEl.classList.remove('card-win', 'card-lose');
+
+            // Render active card info
+            document.getElementById('card-header').style.backgroundColor = currentCard.color;
+            document.getElementById('card-name').innerText = currentCard.name;
+            document.getElementById('card-party').innerText = currentCard.party;
+            document.getElementById('card-code').innerText = currentCard.code;
+            document.getElementById('card-svg').innerHTML = currentCard.svg;
+
+            // Render stats
+            document.getElementById('stat-beliebtheit').innerText = `${currentCard.stats.beliebtheit} %`;
+            document.getElementById('stat-vermoegen').innerText = `${currentCard.stats.vermoegen} Mio €`;
+            document.getElementById('stat-followers').innerText = `${currentCard.stats.followers} K`;
+            document.getElementById('stat-tempo').innerText = `${currentCard.stats.tempo} WPM`;
+            document.getElementById('stat-skandal').innerText = `${currentCard.stats.skandal} / 100`;
+            document.getElementById('stat-erfahrung').innerText = `${currentCard.stats.erfahrung} Jahre`;
+
+            document.getElementById('card-quote-toast').innerText = `"${currentCard.quote}"`;
+
+            const banner = document.getElementById('turn-banner');
+            const rows = document.querySelectorAll('.stat-row');
+
+            if (gameMode === 'vs_player') {
+                rows.forEach(r => r.classList.remove('disabled', 'opacity-60'));
+                if (isPlayerTurn) {
+                    banner.className = "flex-1 bg-yellow-400 text-black font-black text-xs sm:text-sm py-1 px-3 rounded-xl border-2 border-black text-center shadow-[0_2px_0_#000]";
+                    banner.innerText = "👉 SPIELER 1 AM ZUG! Wähle eine Kategorie:";
+                } else {
+                    banner.className = "flex-1 bg-red-500 text-white font-black text-xs sm:text-sm py-1 px-3 rounded-xl border-2 border-black text-center shadow-[0_2px_0_#000]";
+                    banner.innerText = "👉 SPIELER 2 AM ZUG! Wähle eine Kategorie:";
+                }
+            } else {
+                if (isPlayerTurn) {
+                    banner.className = "flex-1 bg-yellow-400 text-black font-black text-xs sm:text-sm py-1 px-3 rounded-xl border-2 border-black text-center shadow-[0_2px_0_#000]";
+                    banner.innerText = "👉 DU BIST AM ZUG! Wähle eine Kategorie:";
+                    rows.forEach(r => r.classList.remove('disabled', 'opacity-60'));
+                } else {
+                    banner.className = "flex-1 bg-red-500 text-white font-black text-xs sm:text-sm py-1 px-3 rounded-xl border-2 border-black text-center shadow-[0_2px_0_#000]";
+                    banner.innerText = "🤖 KI DENKT NACH...";
+                    rows.forEach(r => r.classList.add('disabled', 'opacity-60'));
+                    setTimeout(playCpuTurn, 1300);
+                }
+            }
+        }
+
+        function playTurn(category) {
+            if (isProcessing) return;
+            if (gameMode === 'vs_cpu' && !isPlayerTurn) return;
+
+            isProcessing = true;
+            sound.click();
+            executeDuel(category);
+        }
+
+        function playCpuTurn() {
+            if (isPlayerTurn || isProcessing) return;
+            isProcessing = true;
+
+            const cpuCard = cpuDeck[0];
+            const stats = cpuCard.stats;
+            let bestCat = 'beliebtheit';
+            let maxVal = -1;
+
+            for (let cat in stats) {
+                if (stats[cat] > maxVal) {
+                    maxVal = stats[cat];
+                    bestCat = cat;
+                }
+            }
+
+            executeDuel(bestCat);
+        }
+
+        function executeDuel(category) {
+            const p1Card = playerDeck[0];
+            const p2Card = cpuDeck[0];
+
+            const p1Val = p1Card.stats[category];
+            const p2Val = p2Card.stats[category];
+
+            const catNames = { 
+                beliebtheit: 'Beliebtheit', vermoegen: 'Vermögen', followers: 'Social Followers',
+                tempo: 'Redetempo', skandal: 'Skandal-Faktor', erfahrung: 'Dienstjahre' 
+            };
+            const catUnits = { 
+                beliebtheit: '%', vermoegen: 'Mio €', followers: 'K',
+                tempo: 'WPM', skandal: '/ 100', erfahrung: 'Jahre' 
+            };
+
+            document.getElementById('duel-p-name').innerText = p1Card.name;
+            document.getElementById('duel-p-val').innerText = `${p1Val} ${catUnits[category]}`;
+            
+            document.getElementById('duel-c-name').innerText = p2Card.name;
+            document.getElementById('duel-c-val').innerText = `${p2Val} ${catUnits[category]}`;
+
+            document.getElementById('duel-cat-title').innerText = `Kategorie: ${catNames[category]}`;
+
+            const overlay = document.getElementById('cpu-card-overlay');
+            const resultBox = document.getElementById('duel-result-box');
+            const outcomeText = document.getElementById('duel-outcome-text');
+            const pCardEl = document.getElementById('player-card');
+
+            pendingTurnSwitch = false;
+
+            if (p1Val > p2Val) {
+                sound.win();
+                pCardEl.classList.add('card-win');
+                resultBox.className = "bg-emerald-300 border-3 border-black rounded-2xl p-2 text-center w-full max-w-xs mb-3 shadow-md";
+                outcomeText.innerText = gameMode === 'vs_player' ? "PUNKT FÜR SPIELER 1! 🎉" : "SIEG FÜR DICH! 🎉";
+                
+                playerDeck.push(playerDeck.shift());
+                playerDeck.push(cpuDeck.shift());
+                if (!isPlayerTurn) pendingTurnSwitch = true;
+                isPlayerTurn = true;
+            } else if (p2Val > p1Val) {
+                sound.lose();
+                pCardEl.classList.add('card-lose');
+                resultBox.className = "bg-red-300 border-3 border-black rounded-2xl p-2 text-center w-full max-w-xs mb-3 shadow-md";
+                outcomeText.innerText = gameMode === 'vs_player' ? "PUNKT FÜR SPIELER 2! 🎉" : "PUNKT FÜR KI! 🤖";
+                
+                cpuDeck.push(cpuDeck.shift());
+                cpuDeck.push(playerDeck.shift());
+                if (isPlayerTurn) pendingTurnSwitch = true;
+                isPlayerTurn = false;
+            } else {
+                sound.click();
+                resultBox.className = "bg-yellow-300 border-3 border-black rounded-2xl p-2 text-center w-full max-w-xs mb-3 shadow-md";
+                outcomeText.innerText = "UNENTSCHIEDEN! ⚖️";
+                
+                playerDeck.push(playerDeck.shift());
+                cpuDeck.push(cpuDeck.shift());
+            }
+
+            overlay.classList.remove('hidden');
+            currentRound++;
+        }
+
+        function nextRound() {
+            sound.click();
+            document.getElementById('cpu-card-overlay').classList.add('hidden');
+            isProcessing = false;
+
+            if (gameMode === 'vs_player' && pendingTurnSwitch) {
+                const handoverScreen = document.getElementById('handover-screen');
+                const handoverText = document.getElementById('handover-text');
+                handoverText.innerText = isPlayerTurn ? 
+                    "Gib das Smartphone an SPIELER 1 weiter!" : 
+                    "Gib das Smartphone an SPIELER 2 weiter!";
+                handoverScreen.classList.remove('hidden');
+            } else {
+                renderRound();
+            }
+        }
+
+        function confirmHandover() {
+            sound.click();
+            document.getElementById('handover-screen').classList.add('hidden');
+            renderRound();
+        }
+
+        function showGameOver(player1Won) {
+            const modal = document.getElementById('game-over-modal');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const emoji = document.getElementById('modal-emoji');
+
+            sound.win();
+            if (gameMode === 'vs_player') {
+                title.innerText = player1Won ? "SPIELER 1 SIEGT!" : "SPIELER 2 SIEGT!";
+                title.className = player1Won ? "comic-font text-3xl text-blue-500 drop-shadow-[0_2px_0_#000]" : "comic-font text-3xl text-red-500 drop-shadow-[0_2px_0_#000]";
+                desc.innerText = "Alle Politiker-Karten erobert!";
+                emoji.innerText = "👑🏛️";
+            } else {
+                if (player1Won) {
+                    title.innerText = "POLITIK TRUMPF!";
+                    title.className = "comic-font text-3xl text-emerald-500 drop-shadow-[0_2px_0_#000]";
+                    desc.innerText = "Du hast alle Politiker-Karten erobert und regierst das Parlament!";
+                    emoji.innerText = "🏆🏛️";
+                } else {
+                    sound.lose();
+                    title.innerText = "ABGEWÄHLT!";
+                    title.className = "comic-font text-3xl text-red-500 drop-shadow-[0_2px_0_#000]";
+                    desc.innerText = "Die KI hat dein Kartendeck komplett übernommen!";
+                    emoji.innerText = "📉😭";
+                }
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // Initial Menu Show
+        openMenuModal();
+    </script>
+</body>
+</html>
