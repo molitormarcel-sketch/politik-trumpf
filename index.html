@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bürger-Echo Ingelheim</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide-react.min.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+    const { 
+      MapPin, Camera, AlertCircle, CheckCircle2, Clock, ThumbsUp, 
+      Filter, Send, Shield, ChevronRight, UserCheck, ArrowLeft 
+    } = lucide;
+
+    const initialReports = [
+      {
+        id: 1,
+        title: "Schlagloch Bahnhofstraße",
+        category: "Straßenschäden",
+        district: "Ober-Ingelheim",
+        address: "Bahnhofstraße 12, 55218 Ingelheim",
+        status: "in_bearbeitung",
+        date: "01.11.2026",
+        likes: 12,
+        userLiked: false,
+        desc: "Tiefe Vertiefung in der Fahrbahn nahe dem Fußgängerüberweg. Gefahrenstelle für Radfahrer.",
+        img: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=600",
+        officialNote: "Bauhof ist informiert. Reparatur für kommenden Dienstag terminiert."
+      },
+      {
+        id: 2,
+        title: "Defekte Straßenlaterne",
+        category: "Beleuchtung",
+        district: "Frei-Weinheim",
+        address: "Rheinstraße 88, 55218 Ingelheim",
+        status: "erledigt",
+        date: "28.10.2026",
+        likes: 5,
+        userLiked: false,
+        desc: "Leuchte flackert ständig und fällt nachts komplett aus.",
+        img: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&q=80&w=600",
+        afterImg: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=600",
+        officialNote: "Leuchtmittel wurde durch das Tiefbauamt ausgetauscht."
+      },
+      {
+        id: 3,
+        title: "Wilder Müll am Spielplatz",
+        category: "Sauberkeit",
+        district: "Wackernheim",
+        address: "Dorn-Dürkheimer Str., 55218 Ingelheim",
+        status: "eingegangen",
+        date: "31.10.2026",
+        likes: 19,
+        userLiked: false,
+        desc: "Mehrere Müllsäcke und Altreifen neben den Abfallbehältern abgestellt.",
+        img: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&q=80&w=600",
+        officialNote: null
+      }
+    ];
+
+    function App() {
